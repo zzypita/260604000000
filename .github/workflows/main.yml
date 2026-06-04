@@ -2,13 +2,18 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ] # 當推送到 main 分支時觸發（請根據你的預設分支修改，例如 master）
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    # 讓底下所有的 run 指令預設都在 26060000 資料夾內執行
+    defaults:
+      run:
+        working-directory: 26060000
 
     steps:
     - name: Checkout repository
@@ -19,14 +24,11 @@ jobs:
       with:
         node-version: 20
         cache: 'npm'
-        cache-dependency-path: '26060000/package-lock.json' # 修正後的子目錄路徑
+        # 這裡改用相對路徑，指向目前的 working-directory 底下
+        cache-dependency-path: '26060000/package-lock.json' 
 
     - name: Install dependencies
-      run: |
-        cd 26060000
-        npm ci
+      run: npm ci
 
     - name: Build project
-      run: |
-        cd 26060000
-        npm run build # 如果你有打包指令的話
+      run: npm run build
