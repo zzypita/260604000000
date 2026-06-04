@@ -1,28 +1,21 @@
-name: Node.js CI
+name: Build
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: push
+
+# 在全域加入這個環境變數
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Build project
-      run: npm run build
-      # 建置後的檔案通常位於 dist 目錄
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # 這裡是你專案本身的 Node 版本，跟 Actions 執行環境不衝突
+          
+      # 你的其他步驟...
